@@ -1,62 +1,58 @@
 package br.com.dio.banco.dominio;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public abstract class Conta implements IConta{
 
-    protected static final int AGENCIA_PADRAO = 0001;
+    private static final int AGENCIA_PADRAO = 1;
+    private static int SEQUENCIAL = 1;
 
-    protected Integer agencia;
-    protected Integer numeroConta;
-    protected Double saldo = 0.0d;
-    protected double taxa;
-    protected String tipoConta;
+    protected int agencia;
+    protected int numeroConta;
+    protected double saldo = 0.0d;
+    protected Cliente cliente;
+    protected double emprestimo;
 
-    public Conta() {
-    }
-    public Conta(Integer agencia, Integer numeroConta, Double saldo, double taxa, String tipoConta) {
-        this.agencia = agencia;
-        this.numeroConta = numeroConta;
-        this.saldo = saldo;
-        this.taxa = taxa;
-        this.tipoConta = tipoConta;
+    public Conta(Cliente cliente) {
+        this.agencia = Conta.AGENCIA_PADRAO;
+        this.numeroConta = SEQUENCIAL++;
+        this.cliente = cliente;
+        this.emprestimo = 1000.00d;
     }
 
-    public Integer getAgencia() {
+    public int getAgencia() {
         return agencia;
     }
 
-    public void setAgencia(Integer agencia) {
-        this.agencia = agencia;
-    }
-
-    public Integer getNumeroConta() {
+    public int getNumeroConta() {
         return numeroConta;
     }
 
-    public void setNumeroConta(Integer numeroConta) {
-        this.numeroConta = numeroConta;
-    }
-
-    public Double getSaldo() {
+    public double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
+    @Override
+    public void sacar(double valor){
+        saldo -= valor;
+    }
+    @Override
+    public void depositar (double valor){
+        saldo += valor;
     }
 
-    public double getTaxa() {
-        return taxa;
+    @Override
+    public void transferir(double valor, Conta contaDestino){
+        this.sacar(valor);
+        contaDestino.depositar(valor);
     }
-
-    public void setTaxa(double taxa) {
-        this.taxa = taxa;
-    }
-
-    public String getTipoConta() {
-        return tipoConta;
-    }
-
-    public void setTipoConta(String tipoConta) {
-        this.tipoConta = tipoConta;
+    @Override
+    public void imprimirExtrato(){
+        System.out.println(LocalDate.now());
+        System.out.println(String.format("Cliente: %s", this.cliente.getNomeCliente()));
+        System.out.println(String.format("Agência: %d", this.agencia));
+        System.out.println(String.format("Conta: %d", this.numeroConta));
+        System.out.println(String.format("Saldo: %.2f", this.saldo));
     }
 }

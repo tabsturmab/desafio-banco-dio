@@ -2,28 +2,13 @@ package br.com.dio.banco.dominio;
 
 public class ContaPoupanca extends Conta {
 
-    @Override
-    public void depositar(double saldo) {
-
+    public ContaPoupanca(Cliente cliente) {
+        super(cliente);
     }
 
     @Override
-    public void sacar(double valor) {
-
-    }
-
-    @Override
-    public void atualiza (double taxa){
-        saldo += saldo * taxa * 3;
-    }
-
-    @Override
-    public void transferir(double valor, Conta contaDestino) {
-
-    }
-
-    @Override
-    public void tipoConta (){
-        System.out.println("Tipo de Conta");
+    public void imprimirExtrato() {
+        System.out.println("--------------Extrato Conta Poupança------------");
+        super.imprimirExtrato();
     }
 }
